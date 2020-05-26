@@ -1,6 +1,8 @@
 import React, { Component } from 'react';
 import { Link } from 'react-router-dom';
 import axios from 'axios';
+import swal from 'sweetalert';
+import toastr from 'toastr';
 
 const Exercise = props => (
     <tr>
@@ -36,13 +38,25 @@ export default class ExercisesList extends Component {
     }
 
     deleteExercise(id) {
-        axios.delete('http://localhost:5000/exercises/' + id)
-            .then(res => console.log(res.data));
-
-        this.setState({
-            exercises: this.state.exercises.filter(el => el._id !== id)
-
-        })
+        swal({
+            title: "Are you sure?",
+            text: "Once deleted, you will not be able to recover this imaginary file!",
+            icon: "warning",
+            buttons: true,
+            dangerMode: true,
+          })
+          .then((willDelete) => {
+            if (willDelete) {
+                axios.delete('http://localhost:5000/exercises/' + id)
+                .then(res => console.log(res.data));
+               
+                this.setState({
+                    exercises: this.state.exercises.filter(el => el._id !== id)
+        
+                })
+            } 
+          });
+       
     }
 
     exercisesList() {

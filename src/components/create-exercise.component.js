@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import axios from 'axios';
 import DatePicker from 'react-datepicker';
 import "react-datepicker/dist/react-datepicker.css";
+import { Redirect } from 'react-router-dom';
 
 export default class CreateExercises extends Component {
     constructor(props) {
@@ -59,6 +60,9 @@ export default class CreateExercises extends Component {
         });
     }
 
+    state = {
+        redirect: false
+    }
     onSubmit(e) {
         e.preventDefault();
 
@@ -71,10 +75,18 @@ export default class CreateExercises extends Component {
 
         console.log(exercise);
         axios.post('http://localhost:5000/exercises/add', exercise)
-        .then(res => console.log(res.data));
-        // window.location = "/";
+        .then(()=>this.setState({redirect:true}));
+      
+      
     }
+
+  
+
     render() {
+        const {redirect}=this.state;
+        if(redirect){
+            return <Redirect to="/"/>
+        }
         return (
             <div>
                 <h3>Create New exercise log</h3>
